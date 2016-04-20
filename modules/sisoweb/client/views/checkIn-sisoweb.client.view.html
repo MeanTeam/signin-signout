@@ -1,0 +1,131 @@
+<!DOCTYPE>
+<!--AngularJS extends HTML with ng-directives. and binds data to HTML with Expressions -->
+
+<html ng-app><!--ng-app directive defines an AngularJS application-->
+<head>
+  <title>Check In\Check Out App</title>
+
+  <!-- Need to set up boot strap to get a responsive layout and look better -->
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+
+  <script type="text/javascript">
+  	document.getElementById('phone').addEventListener('input', function (e) {
+  	  var x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
+  	  e.target.value = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '');
+    });
+  </script>
+
+  <style>
+    fieldset {
+      display: block;
+      position: relative;
+      top: 0;
+      left: 0;      
+      padding: 2em .5em 1.5em .5em;
+      margin: 0 0 1em 0;      
+      background-image: -webkit-gradient(linear, left top, left bottom, from(#CCDDFF), to(#99AACC));     
+    }
+    fieldset legend, form fieldset legend span {
+      display: block;     
+      position: absolute;
+      top: 0;
+      left: 0;
+      margin: 0;
+    }   
+    label {
+      padding-left: 10px;
+    }
+    tr.spaceUnder > td {
+      padding-bottom: .5em;
+    }
+  </style> 
+   
+</head>
+<body bgcolor="black">  
+    <br/><br/>    
+    <div class="container">
+       <center><h1><span style="font-family: Times New Roman">Check-In\Check-Out App</span></h1></center><br><br>
+       <section ng-controller="SisoController">
+ 
+         <form name="sisoForm">
+         <fieldset style="width:520px;">
+               <h5><span style="font-family: Times New Roman"><b>*UPDATE YOUR CURRENT SSA LOCATION</b></span></h5>
+               <table class="table" style="width:510px;">         
+               
+                 <tbody> 	
+                     <tr>
+                         <td><label>Name:</label></td>
+                         <td><input type="text" ng-model="fname" size="10" placeholder="First Name"/>&nbsp;
+                             <input type="text" ng-model="mname" size="1" maxlength="1" placeholder="M"/>&nbsp;
+                             <input type="text" ng-model="lname" size="10" placeholder="Last Name"/></td>                      
+                     </tr>
+
+                      <tr>
+                          <td><label>Manager Name:</label></td>
+                          <td><input type="text" ng-model="mfname" size="13" placeholder="First Name"/>&nbsp;&nbsp;&nbsp;
+                             <input type="text" ng-model="mlname" size="13" placeholder="Last Name"/></td>
+                      </tr>      
+                      <tr>
+                          <td><label>Emergency Contact:</label></td>        
+                          <td><input type="text" id="phone" ng-model="contact" size="18" maxlength="14" placeholder="(xxx)-xxx-xxxx"></td>                
+                      </tr>   
+                      <tr>
+                          <td><label style="padding-top: 3px;">Location:</label></td>
+                          <td><input size="18"ng-model="location"></td>
+                      </tr>
+                      <tr>
+                          <td><label style="padding-top: 3px;">Time In:</label></td>        
+                          <td><input size="18" ng-model="time"></td>                
+                      </tr>               
+                   </tbody>                 
+                 </table>  
+                 <span style="padding-left: 195px;margin-top: -6px;"> 
+                      <button type="button" class="btn btn-primary" ng-click="create()">Check-In</button>&nbsp;                   
+                 </span>              
+         </fieldset>
+        </form>
+        </section><br/><br/>       
+       </div>
+
+       
+       <div>
+         <section ng-controller="SisoController" ng-init="find()"> 
+         <table class="table" style="width:750px;">
+              <thead>
+                   <tr>
+                        <th>Name</th>
+                        <th>Manager</th>
+                        <th>contact</th>
+                        <th>Location</th>                      
+                        <th>Time In</th>
+                   </tr>
+              </thead>
+              <tbody>
+                   <!-- ng-repeat is angular js feature -->
+                   <tr ng-repeat = "siso in sisos" ui-sref="siso.view({sisowebId: siso._id})">
+                        <td>{{siso.fname}}&nbsp;{{siso.mname}},&nbsp;{{siso.lname}}</td>
+                        <td>{{siso.mfname}},&nbsp;{{siso.mlname}}</td>
+                        <td>{{siso.contact}}</td>
+                        <td>{{siso.location}}</td>
+                        <td>{{siso.time}}</td>
+                   </tr>     
+              </tbody>
+          </table><br/>
+         </section>  
+      </div><br><br><br><br>
+ 
+<!-- ngModel directive binds an input,select, textarea to a property on the scope using NgModelController -->
+<!-- Name: <input ng-model="name"><br/>
+Hello, {{name}}!   -->      <!-- Angular way of doing 2 way binding --> 
+
+<!--Configuring Angular JS-->
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.28/angular.min.js"></script>
+<script src="controllers/controller.js"></script>
+</body>
+</html>
+

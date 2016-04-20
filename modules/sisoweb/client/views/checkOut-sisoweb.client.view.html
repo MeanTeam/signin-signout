@@ -1,0 +1,101 @@
+<!DOCTYPE>
+<!--AngularJS extends HTML with ng-directives. and binds data to HTML with Expressions -->
+
+<html ng-app><!--ng-app directive defines an AngularJS application-->
+<head>
+  <title>Check Out App</title>
+
+  <!-- Need to set up boot strap to get a responsive layout and look better -->
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+
+  <script type="text/javascript">
+  	document.getElementById('phone').addEventListener('input', function (e) {
+  	  var x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
+  	  e.target.value = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '');
+    });
+  </script>
+
+  <style>
+    fieldset {
+      display: block;
+      position: relative;
+      top: 0;
+      left: 0;      
+      padding: 2em .5em 1.5em .5em;
+      margin: 0 0 1em 0;      
+      background-image: -webkit-gradient(linear, left top, left bottom, from(#CCDDFF), to(#99AACC));     
+    }      
+    label {
+      padding-left: 10px;
+    }
+    tr.spaceUnder > td {
+      padding-bottom: .5em;
+    }
+  </style> 
+   
+</head>
+<body bgcolor="black">  
+   <br/><br/>
+    <div class="container">
+       <center><h1><span style="font-family: Times New Roman">Check-In\Check-Out App</span></h1></center><br><br>      
+       <section ng-controller="SisoController">   
+         <form name="sisoForm">
+           <fieldset style="width:520px;">
+                 <h5><span style="font-family: Times New Roman"><b>*EMPLOYEE CHECK-OUT</b></span></h5>
+                 <table class="table" style="width:510px;">         
+                      <tbody> 	
+                       <tr>
+                           <td><label>Name:</label></td>
+                           <td><input type="text" ng-model="fname" size="10" placeholder="First Name"/>&nbsp;
+                               <input type="text" ng-model="lname" size="10" placeholder="Last Name"/></td>                      
+                       </tr>
+                     </tbody>                 
+                  </table>  
+                  <span style="padding-left: 125px;margin-top: -6px;"> 
+                       <button type="button" class="btn btn-primary" ng-click="findUser()">Find User</button>&nbsp;
+                  </span>      
+  		     </fieldset>
+       </form>	   
+	     <div ng-show="showNoUserFoundDiv" class="ng-cloak"><h4>User has not checked in Yet<h4></div>
+   	
+	     <div ng-show="showCheckOutDiv" class="ng-cloak">
+  	    	<table class="table" style="width:750px;">
+                <thead>
+                     <tr>
+                          <th>Name</th>
+                          <th>Manager</th>
+                          <th>contact</th>
+                          <th>Location</th>                      
+                          <th>Time In</th>
+                     </tr>
+                </thead>
+                <tbody>
+                     <tr>
+                          <td>{{siso.fname}}&nbsp;{{siso.mname}},&nbsp;{{siso.lname}}</td>
+                          <td>{{siso.mfname}},&nbsp;{{siso.mlname}}</td>
+                          <td>{{siso.contact}}</td>
+                          <td>{{siso.location}}</td>
+                          <td>{{siso.time}}</td>                      
+                       </tr>     
+                </tbody>
+          </table><br/>
+		     <button type="button" class="btn btn-primary" ng-click="remove()">Check-Out</button>&nbsp;
+	      </div>
+	 
+    	  <div ng-show="showMessageDiv" class="ng-cloak">
+    	    <h4> User has checked out </h4>
+    	  </div>
+      </section>  
+  </div>
+
+<!--Configuring Angular JS-->
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.28/angular.min.js"></script>
+<script src="controllers/controller.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,113 @@
+<!DOCTYPE>
+<!--AngularJS extends HTML with ng-directives. and binds data to HTML with Expressions -->
+
+<html ng-app><!--ng-app directive defines an AngularJS application-->
+<head>
+  <title>Check In\Check Out App</title>
+  
+  <!-- Need to set up boot strap to get a responsive layout and look better -->
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+
+  <style>
+    fieldset {
+      display: block;
+      position: relative;
+      top: 0;
+      left: 0;      
+      padding: 2em .5em 1.5em .5em;
+      margin: 0 0 1em 0;      
+      background-image: -webkit-gradient(linear, left top, left bottom, from(#CCDDFF), to(#99AACC));     
+    }
+    fieldset legend, form fieldset legend span {
+      display: block;     
+      position: absolute;
+      top: 0;
+      left: 0;
+      margin: 0;
+    }   
+    label {
+      padding-left: 10px;
+    }
+    tr.spaceUnder > td {
+      padding-bottom: .5em;
+    }
+  </style>
+</head>
+<body bgcolor="black">  
+<div class="container">
+  <center><h1><span style="font-family: Times New Roman">Check-In\Check-Out App</span></center><br><br>     
+  <section ng-controller="SisoController">
+     <form name="sisoForm" ng-submit="listByManager()" novalidate>
+       <fieldset style="width:450px;">
+          <h5><span style="font-family: Times New Roman"><b>*CHECK-IN SEARCH BY MANAGER</b></span></h5>
+          <div class="form-group" show-errors>
+              <table class="table" style="width:450px;">                
+                <tbody>  
+                   <tr>                 
+                      <td><label for="mfname">Manager First Name</label></td>
+                      <td><input name="mfname" type="text" ng-model="mfname" id="mfname" size="18" placeholder="Manager First Name" required>
+                          <div ng-messages="sisoForm.lastname.$error" role="alert">
+                            <p class="help-block error-text" ng-message="required">Manager Last Name is required.</p>
+                          </div>
+                      </td>                     
+                   </tr> 
+                   <tr>                     
+                      <td><label for="mlname">Manager Last Name</label></td>
+                      <td><input name="mlname" type="text" ng-model="mlname" id="mlname" size="18" placeholder="Manager Last Name" required>
+                          <div ng-messages="sisoForm.firstname.$error" role="alert">
+                            <p class="help-block error-text" ng-message="required">Manager First Name is required.</p>
+                          </div>
+                      </td>                     
+                   </tr>                   
+                </tbody>      
+              </table> 
+          </div>
+          <div class="form-group" style="padding-left: 223px;margin-top: -6px;">
+            <input type="submit" value="search" class="btn btn-primary">
+          </div>
+          <div ng-show="error" class="text-danger">
+            <strong ng-bind="error"></strong>
+          </div>
+        </fieldset>
+     </form>
+
+
+     <div>    
+         <table class="table" style="width:750px;">
+                <thead>
+                     <tr>
+                          <th>Name</th>
+                          <th>Manager</th>
+                          <th>contact</th>
+                          <th>Location</th>                      
+                          <th>Time In</th>
+                     </tr>
+                </thead>
+                <tbody>
+                     <!-- ng-repeat is angular js feature -->
+                     <tr ng-repeat = "siso in sisos" ui-sref="siso.view({sisowebId: siso._id})">
+                          <td>{{siso.fname}}&nbsp;{{siso.mname}},&nbsp;{{siso.lname}}</td>
+                          <td>{{siso.mfname}},&nbsp;{{siso.mlname}}</td>
+                          <td>{{siso.contact}}</td>
+                          <td>{{siso.location}}</td>
+                          <td>{{siso.time}}</td>                                                
+                     </tr>     
+                </tbody>
+         </table><br/>
+     </div>
+     <div class="alert alert-warning text-center" ng-if="sisos.$resolved && !sisos.length">
+      Check-in List is empty
+     </div>
+ </section>
+</div>
+<!--Configuring Angular JS-->
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.28/angular.min.js"></script>
+<script src="controllers/controller.js"></script>
+</body>
+</html>
+
