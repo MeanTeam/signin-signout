@@ -63,6 +63,9 @@ exports.list = function (req, res) {
       res.json(sisoweb);			 
     } else {
       console.log('error');
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
     }     
   });
 };
@@ -89,6 +92,9 @@ exports.listByName = function (req, res) {
       res.json(sisoweb);       
     } else {
       console.log('error');
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
     }     
   });
 }; 

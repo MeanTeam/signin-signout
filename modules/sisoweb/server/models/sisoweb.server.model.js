@@ -12,6 +12,15 @@ var SisoSchema = new Schema({
   mfname: { type: String, trim: true },
   mlname: { type: String, trim: true },
   contact: { type: String, trim: true },  
+  /* contact: { type: String, trim: true,
+        validate: {
+          validator: function(v) {
+            return /\(\d{3}\)[ ]\d{3}-\d{4}/.test(v);
+          },
+          message: '{VALUE} is not a valid phone number!'
+        },
+        required: [true, 'Contact phone number required']
+  }, // TODO TEST THIS )*/
   location: { type: String, trim: true },
   time: { type: String, trim: true } 
 });
