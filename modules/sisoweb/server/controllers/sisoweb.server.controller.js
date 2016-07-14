@@ -82,9 +82,14 @@ exports.listByName = function (req, res) {
     name = { mfname: req.query.mfname , mlname:req.query.mlname };
   }
   if (req.query.fname && req.query.lname) {
-    //console.log('req.query.fname : '+req.query.fname+', req.query.lname :'+req.query.lname);
-    name = { fname: req.query.fname , lname:req.query.lname };
+	  if (req.query.mname) {
+		console.log('req.query.fname : '+req.query.fname+', req.query.lname :'+req.query.lname+', req.query.mname :'+req.query.mname);
+		name = { fname: req.query.fname , lname:req.query.lname, mname: req.query.mname };
+	  } else {
+		name = { fname: req.query.fname , lname:req.query.lname };
+	  }
   }
+
   
   siso.find(name).exec(function (err, sisoweb) {
     if(!err){ 
