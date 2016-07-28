@@ -9,8 +9,7 @@ var profilesPolicy = require('../policies/profiles.server.policy'),
 module.exports = function(app) {
   // Profiles Routes
   app.route('/api/profiles').all(profilesPolicy.isAllowed)
-    .get(profiles.listByRole)
-    // .get(profiles.list)
+    .get(profiles.list)
     .post(profiles.create);
 
   app.route('/api/profiles/:profileId').all(profilesPolicy.isAllowed)

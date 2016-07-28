@@ -78,32 +78,26 @@ exports.delete = function(req, res) {
 };
 
 /**
- * List of Profiles
+ * List of Profiles with query parameters
  */
 exports.list = function(req, res) { 
-  Profile.find().sort('-created').populate('user', 'displayName').exec(function(err, profiles) {
-    if (err) {
-      return res.status(400).send({
-        message: errorHandler.getErrorMessage(err)
-      });
-    } else {
-      res.jsonp(profiles);
-    }
-  });
-};
+  // console.log('in profiles.server.controller');
 
-/**
- * List of Profiles By Role
- */
-exports.listByRole = function (req, res) {
-  console.log('in profiles.server.controller');
-
-  var role = '{}';
+  var query = '{}';
   if (req.query.role) {
-    role = { role: req.query.role };
+    query = { role: req.query.role };
+  } else if (req.query.mfname && req.query.mlname) {
+    //console.log('req.query.mfname : '+req.query.mfname+', req.query.mlname :'+req.query.mlname);
+    query = { mfname: req.query.mfname , mlname:req.query.mlname };
+  } else if (req.query.fname && req.query.lname) {
+	  if (req.query.mname) {
+		console.log('req.query.fname : '+req.query.fname+', req.query.lname :'+req.query.lname+', req.query.mname :'+req.query.mname);
+		query = { fname: req.query.fname , lname:req.query.lname, mname: req.query.mname };
+	  } else {
+		query = { fname: req.query.fname , lname:req.query.lname };
+	  }
   }
-  
-  Profile.find(role).exec(function (err, profiles) {
+  Profile.find(query).exec(function (err, profiles) {
     if(!err){ 
       res.json(profiles);       
     } else {
