@@ -14,8 +14,7 @@ var path = require('path'),
  */
 exports.create = function(req, res) {
   var profile = new Profile(req.body);
-  profile.user = req.user;
-
+  // profile.user = req.user;
   profile.save(function(err) {
     if (err) {
       return res.status(400).send({
@@ -46,7 +45,7 @@ exports.read = function(req, res) {
  */
 exports.update = function(req, res) {
   var profile = req.profile ;
-
+// console.log("req body" + _.map(req.body));
   profile = _.extend(profile , req.body);
 
   profile.save(function(err) {

@@ -24,15 +24,6 @@ var ProfileSchema = new Schema({
           message: '{VALUE} is not a valid email address!'
         }
   },
-  /* contact: { type: String, trim: true,
-        validate: {
-          validator: function(v) {
-            return /\(\d{3}\)[ ]\d{3}-\d{4}/.test(v);
-          },
-          message: '{VALUE} is not a valid phone number!'
-        },
-        required: [true, 'Contact phone number required']
-  }, // TODO TEST THIS )*/
   role:  { type: String, trim: true, required: true }, // manager, etc.
   preferredLocation: { type: String, trim: true }
 });
