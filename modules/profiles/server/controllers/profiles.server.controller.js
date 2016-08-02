@@ -82,20 +82,15 @@ exports.delete = function(req, res) {
 exports.list = function(req, res) { 
   // console.log('in profiles.server.controller');
 
-  var query = '{}';
-  if (req.query.role) {
-    query = { role: req.query.role };
-  } else if (req.query.mfname && req.query.mlname) {
-    //console.log('req.query.mfname : '+req.query.mfname+', req.query.mlname :'+req.query.mlname);
-    query = { mfname: req.query.mfname , mlname:req.query.mlname };
-  } else if (req.query.fname && req.query.lname) {
-	  if (req.query.mname) {
-		console.log('req.query.fname : '+req.query.fname+', req.query.lname :'+req.query.lname+', req.query.mname :'+req.query.mname);
-		query = { fname: req.query.fname , lname:req.query.lname, mname: req.query.mname };
-	  } else {
-		query = { fname: req.query.fname , lname:req.query.lname };
+  var keys = _.keys(Profile().schema.paths);
+  var query = {};
+  _.forEach(keys, function(value){
+	  var path = "query." + value;
+	  var val = _.get(req, path);
+	  if (val) {
+		  _.set(query, value, val);
 	  }
-  }
+  });
   Profile.find(query).exec(function (err, profiles) {
     if(!err){ 
       res.json(profiles);       
