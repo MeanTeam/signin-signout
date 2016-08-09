@@ -252,13 +252,6 @@ module.exports.init = function (db) {
 
   // Configure Socket.io
   app = this.configureSocketIO(app, db);
-
-  /* COMMENTED OUT FOR NOW. npm install cron -save
-	var CronJob = require('cron').CronJob;
-		new CronJob('* * * * * *', function() {
-		  console.log('You will see this message every second');
-		}, null, true, 'America/Los_Angeles');
-  */
   
   return app;
 };

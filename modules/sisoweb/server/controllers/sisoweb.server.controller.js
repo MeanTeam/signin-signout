@@ -128,3 +128,10 @@ exports.sisowebByID = function (req, res, next, id) {
     next();
   });
 };   
+
+exports.purgeSigninSignouts = function() {
+	console.log("Nightly Purge");
+	siso.remove({}, function() {
+		console.log("All Sign-Ins/Sign-Outs removed");
+	});
+};
