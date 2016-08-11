@@ -6,6 +6,7 @@
 var path = require('path'),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller')),
   mongoose = require('mongoose'),
+  _ = require('lodash'),
   siso = mongoose.model('siso');
   
 
@@ -132,6 +133,7 @@ exports.sisowebByID = function (req, res, next, id) {
 exports.purgeSigninSignouts = function() {
 	console.log("Nightly Purge");
 	siso.remove({}, function() {
-		console.log("All Sign-Ins/Sign-Outs removed");
+		var dt = new Date(_.now());
+		console.log("All Sign-Ins/Sign-Outs removed, time: " + dt.toTimeString());
 	});
 };

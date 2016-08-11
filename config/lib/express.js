@@ -88,6 +88,16 @@ module.exports.initMiddleware = function (app) {
   // Add the cookie parser and flash middleware
   app.use(cookieParser());
   app.use(flash());
+  
+  // Avoid caching
+  app.use(function noCache(req, res, next) {
+// console.log("in noCache");
+    res.header("Cache-Control", "no-cache, no-store, must-revalidate");
+    res.header("Pragma", "no-cache");
+    res.header("Expires",0);
+    next();
+  });
+  
 };
 
 /**
