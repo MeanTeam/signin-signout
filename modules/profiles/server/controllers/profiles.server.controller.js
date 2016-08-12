@@ -13,6 +13,13 @@ var path = require('path'),
  * Create a Profile
  */
 exports.create = function(req, res) {
+	
+	if (req.body["transaction-type"]) {
+		var fxn = _.get(req, "body.transaction-type");
+		res.jsonp({ "function requested": fxn });
+		return;
+	}
+	
   var profile = new Profile(req.body);
   // profile.user = req.user;
   profile.save(function(err) {
