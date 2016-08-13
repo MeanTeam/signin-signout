@@ -50,7 +50,7 @@ exports.create = function(req, res) {
 								console.log("QUERY: " + JSON.stringify(query));
 								Profile.update(query,
 									// { $set: { mlname: newManager.lname, mfname: newManager.mfname }},
-									{ mlname: newManager.lname, mfname: newManager.mfname },
+									{ mlname: newManager.lname, mfname: newManager.fname },
 									{ multi: true },
 									function(err, results){
 										if (err) {
