@@ -19,8 +19,36 @@ exports.create = function(req, res) {
 		var params = _.get(req, "body.parameters");
 		if (fxn === "reassign-manager") {
 			// 2 use cases - all profiles for that manager or just certain profiles
-			if (params.userIds) {
+			if (params.userIds && params.userIds.length) {
 				console.log("I AM THERE");
+				Profile.findById(params.toManagerId, function(err, found) {
+					if (err) {
+					  return res.status(400).send({
+						message: errorHandler.getErrorMessage(err)
+					  });
+					} else {
+						var newManager = found;
+						var query = { _id : { $in : params.userIds } };
+						// res.jsonp({ "message": "success" });
+						console.log("QUERY: " + JSON.stringify(query));
+						Profile.update(query,
+							// { $set: { mlname: newManager.lname, mfname: newManager.mfname }},
+							{ mlname: newManager.lname, mfname: newManager.fname },
+							{ multi: true },
+							function(err, results){
+								if (err) {
+								  return res.status(400).send({
+									message: errorHandler.getErrorMessage(err)
+								  });
+								} else {
+									console.log("SUCCESS changed to: " + newManager.lname + ", " + newManager.fname);
+									console.log("SUCCESS: " + JSON.stringify(results));
+									res.jsonp({ "message": "success" });
+								}
+							}
+						);
+					}
+				});
 			} else {
 				// first find managers via ID
 				Profile.findById(params.fromManagerId, function(err, found) {
