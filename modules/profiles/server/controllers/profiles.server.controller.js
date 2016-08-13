@@ -16,7 +16,64 @@ exports.create = function(req, res) {
 	
 	if (req.body["transaction-type"]) {
 		var fxn = _.get(req, "body.transaction-type");
-		res.jsonp({ "function requested": fxn });
+		var params = _.get(req, "body.parameters");
+		if (fxn === "reassign-manager") {
+			// 2 use cases - all profiles for that manager or just certain profiles
+			if (params.userIds) {
+				console.log("I AM THERE");
+			} else {
+				// first find managers via ID
+				Profile.findById(params.fromManagerId, function(err, found) {
+					if (err) {
+					  return res.status(400).send({
+						message: errorHandler.getErrorMessage(err)
+					  });
+					} else {
+						var oldManager = found;
+						Profile.findById(params.toManagerId, function(err, found) {
+							if (err) {
+							  return res.status(400).send({
+								message: errorHandler.getErrorMessage(err)
+							  });
+							} else {
+								var newManager = found;
+								/*
+								var resp =
+ 								{ "managers":
+									[{"oldManager": { "lastName": oldManager.lname, "firstName": oldManager.fname }},
+									 { "newManager": { "lastName": newManager.lname, "firstName": newManager.fname }}
+									]
+								};
+								res.jsonp(resp); 
+								*/
+								var query = { mlname: oldManager.lname, mfname: oldManager.fname };
+								console.log("QUERY: " + JSON.stringify(query));
+								Profile.update(query,
+									// { $set: { mlname: newManager.lname, mfname: newManager.mfname }},
+									{ mlname: newManager.lname, mfname: newManager.mfname },
+									{ multi: true },
+									function(err, results){
+										if (err) {
+										  return res.status(400).send({
+											message: errorHandler.getErrorMessage(err)
+										  });
+										} else {
+											console.log("SUCCESS changed: " + oldManager.lname + " to " + newManager.lname);
+											console.log("SUCCESS: " + JSON.stringify(results));
+											res.jsonp({ "message": "success" });
+										}
+									}
+								);
+							}
+						});
+					}
+				});
+				// Profile.update({})
+			}
+			// res.jsonp({ "function requested": fxn });
+		} else {
+			res.jsonp({ "function requested": fxn });
+		}
 		return;
 	}
 	
@@ -89,7 +146,7 @@ exports.delete = function(req, res) {
 exports.list = function(req, res) { 
   // console.log('in profiles.server.controller');
 
-  var keys = _.keys(Profile().schema.paths);
+  var keys = _.keys(new Profile().schema.paths);
   var query = {};
   _.forEach(keys, function(value){
 	  var path = "query." + value;
