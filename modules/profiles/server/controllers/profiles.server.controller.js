@@ -18,9 +18,27 @@ exports.create = function(req, res) {
 		var fxn = _.get(req, "body.transaction-type");
 		var params = _.get(req, "body.parameters");
 		if (fxn === "reassign-manager") {
+			
+			var reassignManager = function (query, newManager) {
+					console.log("QUERY: " + JSON.stringify(query));
+					Profile.update(query,
+					{ mlname: newManager.lname, mfname: newManager.fname },
+					{ multi: true },
+					function(err, results){
+						if (err) {
+						  return res.status(400).send({
+								message: errorHandler.getErrorMessage(err)
+						  });
+						} else {
+							console.log("SUCCESS: " + JSON.stringify(results));
+							res.jsonp({ "message": "success" });
+						}
+					}
+				);
+			};
+			
 			// 2 use cases - all profiles for that manager or just certain profiles
 			if (params.userIds && params.userIds.length) {
-				console.log("I AM THERE");
 				Profile.findById(params.toManagerId, function(err, found) {
 					if (err) {
 					  return res.status(400).send({
@@ -29,26 +47,9 @@ exports.create = function(req, res) {
 					} else {
 						var newManager = found;
 						var query = { _id : { $in : params.userIds } };
-						// res.jsonp({ "message": "success" });
-						console.log("QUERY: " + JSON.stringify(query));
-						Profile.update(query,
-							// { $set: { mlname: newManager.lname, mfname: newManager.mfname }},
-							{ mlname: newManager.lname, mfname: newManager.fname },
-							{ multi: true },
-							function(err, results){
-								if (err) {
-								  return res.status(400).send({
-									message: errorHandler.getErrorMessage(err)
-								  });
-								} else {
-									console.log("SUCCESS changed to: " + newManager.lname + ", " + newManager.fname);
-									console.log("SUCCESS: " + JSON.stringify(results));
-									res.jsonp({ "message": "success" });
-								}
-							}
-						);
+						reassignManager(query,found);
 					}
-				});
+				} );
 			} else {
 				// first find managers via ID
 				Profile.findById(params.fromManagerId, function(err, found) {
@@ -65,40 +66,13 @@ exports.create = function(req, res) {
 							  });
 							} else {
 								var newManager = found;
-								/*
-								var resp =
- 								{ "managers":
-									[{"oldManager": { "lastName": oldManager.lname, "firstName": oldManager.fname }},
-									 { "newManager": { "lastName": newManager.lname, "firstName": newManager.fname }}
-									]
-								};
-								res.jsonp(resp); 
-								*/
 								var query = { mlname: oldManager.lname, mfname: oldManager.fname };
-								console.log("QUERY: " + JSON.stringify(query));
-								Profile.update(query,
-									// { $set: { mlname: newManager.lname, mfname: newManager.mfname }},
-									{ mlname: newManager.lname, mfname: newManager.fname },
-									{ multi: true },
-									function(err, results){
-										if (err) {
-										  return res.status(400).send({
-											message: errorHandler.getErrorMessage(err)
-										  });
-										} else {
-											console.log("SUCCESS changed: " + oldManager.lname + " to " + newManager.lname);
-											console.log("SUCCESS: " + JSON.stringify(results));
-											res.jsonp({ "message": "success" });
-										}
-									}
-								);
+								reassignManager(query, newManager);
 							}
 						});
 					}
 				});
-				// Profile.update({})
 			}
-			// res.jsonp({ "function requested": fxn });
 		} else {
 			res.jsonp({ "function requested": fxn });
 		}
