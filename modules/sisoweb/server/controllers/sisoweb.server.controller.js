@@ -109,6 +109,7 @@ exports.listByName = function (req, res) {
  * Profile middleware (not sure how this is supposed to work)
  */
 exports.sisowebByID = function (req, res, next, id) {
+  // console.log('sisowebByID >>>> '+id + ", paramCallback " + paramCallbacks[0]);
   console.log('sisowebByID >>>> '+id);
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).send({
@@ -120,6 +121,11 @@ exports.sisowebByID = function (req, res, next, id) {
     if (err) {
       return next(err);
     } else if (!siso) {
+	  if (req.method === 'DELETE') {
+		  return res.status(200).send({
+			message: 'Siso not found on DELETE, ignoring'
+		  });
+	  }
       return res.status(404).send({
         message: 'No siso with that identifier has been found'
       });
