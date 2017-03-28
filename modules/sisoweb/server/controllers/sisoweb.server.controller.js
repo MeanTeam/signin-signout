@@ -109,7 +109,6 @@ exports.listByName = function (req, res) {
  * Profile middleware (not sure how this is supposed to work)
  */
 exports.sisowebByID = function (req, res, next, id) {
-  // console.log('sisowebByID >>>> '+id + ", paramCallback " + paramCallbacks[0]);
   console.log('sisowebByID >>>> '+id);
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).send({
