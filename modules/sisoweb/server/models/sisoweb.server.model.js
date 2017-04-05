@@ -22,7 +22,8 @@ var SisoSchema = new Schema({
         required: [true, 'Contact phone number required']
   }, // TODO TEST THIS )*/
   location: { type: String, trim: true },
-  time: { type: String, trim: true } 
+  time: { type: String, trim: true },
+  date: { type: Date, default: Date.now }  
 });
 
 SisoSchema.set('collection', 'siso');
