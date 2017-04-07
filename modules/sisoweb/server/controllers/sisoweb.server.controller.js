@@ -15,15 +15,27 @@ var path = require('path'),
  */
 exports.create = function (req, res, next) {
   console.log('in create');
-  var sisos = new siso(req.body);
-  console.log('new siso: ' + siso);
-  sisos.save(function (err) {
+  var query = { fname: req.body.fname , lname:req.body.lname, mname: req.body.mname };
+  console.log('removing: ' + JSON.stringify(query));
+  siso.remove( query, function (err) {
     if (err) {
-      console.log('error');      
-    } else {
-      res.json(sisos);
-    }
+      console.log('error');
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+	} else {
+	  var sisos = new siso(req.body);
+	  console.log('new siso: ' + siso);
+	  sisos.save(function (err) {
+		if (err) {
+		  console.log('error');      
+		} else {
+		  res.json(sisos);
+		}
+	  });
+	}
   });
+  
 };
 
 /**
@@ -35,7 +47,6 @@ exports.read = function (req, res) {
 
 /**
  * Delete a Siso
- * (probably don't really ever want to delete these)
  */
 exports.delete = function (req, res) {
   console.log('**** delete() ****');
@@ -106,7 +117,7 @@ exports.listByName = function (req, res) {
 }; 
 
 /**
- * Profile middleware (not sure how this is supposed to work)
+ * Profile middleware
  */
 exports.sisowebByID = function (req, res, next, id) {
   console.log('sisowebByID >>>> '+id);
