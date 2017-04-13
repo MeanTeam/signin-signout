@@ -23,7 +23,8 @@ var SisoSchema = new Schema({
   }, // TODO TEST THIS )*/
   location: { type: String, trim: true },
   time: { type: String, trim: true },
-  date: { type: Date, default: Date.now }  
+  date: { type: Date, default: Date.now },
+  cancelled: { type: Date, default: null }
 });
 
 SisoSchema.set('collection', 'siso');
