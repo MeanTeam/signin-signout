@@ -56,7 +56,7 @@ exports.delete = function (req, res) {
   var sisos = req.siso;
   console.log('**** delete() ****' + sisos);
   // sisos.remove(function (err) {
-  sisos.update({ cancelled: Date.now },
+  sisos.update({ cancelled: new Date(_.now()) },
    function (err) {
     if (err) {
       return res.status(400).send({
@@ -93,18 +93,21 @@ exports.list = function (req, res) {
 exports.listByName = function (req, res) {
   console.log('in sisoweb.server.controller');
 
-  var name = {"cancelled": null};
+  var name = {};
   if (req.query.mfname && req.query.mlname) {
     //console.log('req.query.mfname : '+req.query.mfname+', req.query.mlname :'+req.query.mlname);
-    name = { mfname: req.query.mfname , mlname:req.query.mlname, "cancelled": null };
+    name = { mfname: req.query.mfname , mlname:req.query.mlname };
   }
   if (req.query.fname && req.query.lname) {
 	  if (req.query.mname) {
-		console.log('req.query.fname : '+req.query.fname+', req.query.lname :'+req.query.lname+', req.query.mname :'+req.query.mname);
-		name = { fname: req.query.fname , lname:req.query.lname, mname: req.query.mname, "cancelled": null };
+		// console.log('req.query.fname : '+req.query.fname+', req.query.lname :'+req.query.lname+', req.query.mname :'+req.query.mname);
+		name = { fname: req.query.fname , lname:req.query.lname, mname: req.query.mname };
 	  } else {
-		name = { fname: req.query.fname , lname:req.query.lname, "cancelled": null };
+		name = { fname: req.query.fname , lname:req.query.lname };
 	  }
+  }
+  if (!req.query.historical) {
+	  name.cancelled = null;
   }
 
   console.log("in listByName, query: " + JSON.stringify(name));
