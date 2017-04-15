@@ -15,7 +15,7 @@ var path = require('path'),
  */
 exports.create = function (req, res, next) {
   console.log('in create');
-  var query = { fname: req.body.fname , lname:req.body.lname, mname: req.body.mname };
+  var query = { fname: req.body.fname , lname:req.body.lname, mname: req.body.mname, "cancelled" : null };
   console.log('removing: ' + JSON.stringify(query));
   // siso.remove( query, function (err) {
   siso.update( query, { cancelled: new Date(_.now()) },
@@ -157,7 +157,7 @@ exports.sisowebByID = function (req, res, next, id) {
 exports.purgeSigninSignouts = function() {
 	console.log("Nightly Purge");
 	// siso.remove({}, function() {
-	siso.update({}, { cancelled: new Date(_.now()) },
+	siso.update({"cancelled" : null}, { cancelled: new Date(_.now()) },
 						{ multi: true },
 	 function() {
 		var dt = new Date(_.now());
