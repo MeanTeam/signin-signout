@@ -74,9 +74,28 @@ exports.delete = function (req, res) {
  */
 exports.list = function (req, res) {
   console.log('in list');
-  siso.find({"cancelled" : null}).exec(function (err, sisoweb) {
+  var keys = _.keys(new siso().schema.paths);
+  var query = {"cancelled" : null};
+  _.forEach(keys, function(value){
+	  var path = "query." + value;
+	  var val = _.get(req, path);
+	  if (val) {
+		  _.set(query, value, val);
+	  }
+  });
+  siso.find(query).exec(function (err, sisos) {
     if(!err){ 
-      /*console.log('returning profiles' + sisoweb);*/            
+      res.json(sisos);       
+    } else {
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    }     
+  });
+
+  /* siso.find({"cancelled" : null}).exec(function (err, sisoweb) {
+    if(!err){ 
+      / *console.log('returning profiles' + sisoweb);* /            
       res.json(sisoweb);			 
     } else {
       console.log('error');
@@ -84,7 +103,7 @@ exports.list = function (req, res) {
         message: errorHandler.getErrorMessage(err)
       });
     }     
-  });
+  }); */
 };
 
 /**
@@ -125,7 +144,7 @@ exports.listByName = function (req, res) {
 }; 
 
 /**
- * Profile middleware
+ * SISO middleware
  */
 exports.sisowebByID = function (req, res, next, id) {
   console.log('sisowebByID >>>> '+id);

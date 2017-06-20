@@ -9,7 +9,8 @@ module.exports = function (app) {
   // Routing logic   
   // sisoweb collection routes
   app.route('/api/sisoweb').all(/*profilePolicy.isAllowed NO POLICY FOR NOW*/)
-    .get(sisoweb.listByName)
+    .get(sisoweb.list)
+    // .get(sisoweb.listByName)
     .post(sisoweb.create);
 
   // Single sisoweb routes
