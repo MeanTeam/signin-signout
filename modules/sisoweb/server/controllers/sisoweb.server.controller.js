@@ -185,7 +185,7 @@ exports.purgeSigninSignouts = function() {
 };
 
 exports.usersByLoc = function (req, res) {
-  siso.find({location: req.location, "cancelled" : null}, 'fname lname contact').exec(function (err, sisos) {
+  siso.find({location: decodeURI(req.param('id')), "cancelled" : null}, 'fname lname contact').exec(function (err, sisos) {
     if(!err){
       res.statusCode = 200;
       res.json({
