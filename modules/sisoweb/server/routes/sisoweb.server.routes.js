@@ -18,6 +18,11 @@ module.exports = function (app) {
     .get(sisoweb.read)  
     .delete(sisoweb.delete);
 
+  app.route('/api/loc/:id').all().
+    get(sisoweb.usersByLoc);
+
   // Finish by binding the profile middleware
-  app.param('sisowebId', sisoweb.sisowebByID);    
+  app.param('sisowebId', sisoweb.sisowebByID);
+
+
 };

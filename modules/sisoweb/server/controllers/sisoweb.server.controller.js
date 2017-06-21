@@ -183,3 +183,19 @@ exports.purgeSigninSignouts = function() {
 		console.log("All Sign-Ins/Sign-Outs removed, time: " + dt.toTimeString());
 	});
 };
+
+exports.usersByLoc = function (req, res) {
+  siso.find({location: req.location, "cancelled" : null}, 'fname lname contact').exec(function (err, sisos) {
+    if(!err){
+      res.statusCode = 200;
+      res.json({
+        count: sisos.length,
+        users: (sisos.length > 5) ? [] : sisos
+      });
+    } else {
+      return res.status(400).send({
+        message: errorHandler.getErrorMessage(err)
+      });
+    }
+  });
+};
